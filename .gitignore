@@ -1,0 +1,5 @@
+# Laravel 5 & Lumen specific
+.env
+.env.testing
+/vendor
+/.idea
