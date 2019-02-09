@@ -49,4 +49,28 @@ class FilterFactory implements IFactory
         return $filters;
     }
 
+    /**
+     * @param Request $request
+     * @param [] $allows
+     * @return Filter[]|Collection
+     */
+    public static function makeCollectionFromRequest($request, $allows = [])
+    {
+        $entities = $request->get('filters', []);
+        $filters = collect();
+
+        foreach ($entities as $columnName => $filter){
+            if( count($allows) > 0 && !isset($allows)){
+                continue;
+            }
+
+            $filter['column_name'] = $columnName;
+
+            $filters->push(self::makeFromArray($filter));
+        }
+
+        return $filters;
+    }
+
+
 }

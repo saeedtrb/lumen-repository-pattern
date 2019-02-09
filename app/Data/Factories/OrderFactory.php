@@ -44,4 +44,29 @@ class OrderFactory implements IFactory
         return $filters;
     }
 
+    /**
+     * @param Request $request
+     * @param array $allows
+     * @return Order[]|Collection
+     */
+    public static function makeCollectionFromRequest($request, $allows = [])
+    {
+        $entities = $request->get('orders', []);
+        $orders = collect();
+
+        foreach ($entities as $columnName => $order){
+
+            if( count($allows) > 0 && !isset($allows)){
+                continue;
+            }
+
+            $order['column_name'] = $columnName;
+
+            $orders->push(self::makeFromArray($order));
+        }
+
+        return $orders;
+    }
+
+
 }
