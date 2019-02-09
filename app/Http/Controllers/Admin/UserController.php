@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Data\Entities\HttpStatusCode;
 use App\Data\Entities\Response;
+use App\Data\Entities\User;
 use App\Data\Factories\FilterFactory;
 use App\Data\Factories\OrderFactory;
 use App\Data\Repositories\MySql\UserRepository;
@@ -59,6 +61,46 @@ class UserController extends Controller
 
         $response->value->add('user', UserResource::toArray($user));
 
+        return $response->json();
+
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create(Request $request){
+
+        $response = new Response();
+
+        $validator = $this->makeValidator($request, [
+            'first_name' => 'required|min:3|max:64',
+            'last_name' => 'required|min:3|max:64',
+            'mobile' => 'required|min:3|max:64',
+            'email' => 'nullable|min:3|max:64',
+            'password' => 'required|min:8|max:32'
+        ]);
+
+        if ($validator->fails()) {
+            $response->code = HttpStatusCode::UNPROCESSABLE_ENTITY;
+            $response->error->addValidator($validator);
+            return $response->json();
+        }
+
+        $user = new User();
+
+        $user->setFirstName($request->get('first_name'));
+        $user->setLastName($request->get('last_name'));
+        $user->setMobile($request->get('mobile'));
+        $user->setEmail($request->get('email'));
+        $user->setPassword(User::passwordHash($request->get('password')));
+        $user->setDisabled(false);
+
+        $user = UserRepository::create($user);
+
+
+        $response->code = HttpStatusCode::CREATE;
+        $response->value->add('user', UserResource::toArray($user));
         return $response->json();
 
     }

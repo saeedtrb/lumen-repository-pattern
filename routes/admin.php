@@ -11,5 +11,6 @@ $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($
     $router->group(['prefix' => 'users'], function () use ($router) {
         $router->get('/', 'UserController@getAll');
         $router->get('/{id}', 'UserController@getDetails');
+        $router->post('/', 'UserController@create');
     });
 });
