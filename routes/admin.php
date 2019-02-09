@@ -13,5 +13,6 @@ $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($
         $router->get('/{id}', 'UserController@getDetails');
         $router->post('/', 'UserController@create');
         $router->post('/{id}/update', 'UserController@update');
+        $router->post('/{id}/delete', 'UserController@delete');
     });
 });

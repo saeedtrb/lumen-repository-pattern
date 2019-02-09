@@ -151,4 +151,21 @@ class UserController extends Controller
         return $response->json();
 
     }
+
+    /**
+     * @param Request $request
+     * @param int $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request, $userId){
+
+        $response = new Response();
+
+
+        $result = UserRepository::delete($userId);
+
+        return $response->json();
+
+    }
+
 }
