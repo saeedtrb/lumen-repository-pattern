@@ -105,4 +105,50 @@ class UserController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @param int $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $userId){
+
+
+        $response = new Response();
+
+        $validator = $this->makeValidator($request, [
+            'first_name' => 'required|min:3|max:64',
+            'last_name' => 'required|min:3|max:64',
+            'mobile' => 'required|min:3|max:64',
+            'email' => 'nullable|min:3|max:64',
+            'password' => 'nullable|min:8|max:32',
+            'disabled' => 'required|boolean'
+        ]);
+
+        if ($validator->fails()) {
+            $response->code = HttpStatusCode::UNPROCESSABLE_ENTITY;
+            $response->error->addValidator($validator);
+            return $response->json();
+        }
+
+        $user = new User();
+
+        $user->setId($userId);
+        $user->setFirstName($request->get('first_name'));
+        $user->setLastName($request->get('last_name'));
+        $user->setMobile($request->get('mobile'));
+        $user->setEmail($request->get('email'));
+
+        if(!empty($request->get('password'))){
+            $user->setPassword(User::passwordHash($request->get('password')));
+        }
+
+        $user->setDisabled($request->get('disabled'));
+
+        $user = UserRepository::update($user);
+
+        $response->value->add('user', UserResource::toArray($user));
+
+        return $response->json();
+
+    }
 }
