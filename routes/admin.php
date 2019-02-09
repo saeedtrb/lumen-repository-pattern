@@ -10,5 +10,6 @@ $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($
     // Users
     $router->group(['prefix' => 'users'], function () use ($router) {
         $router->get('/', 'UserController@getAll');
+        $router->get('/{id}', 'UserController@getDetails');
     });
 });

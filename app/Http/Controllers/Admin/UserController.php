@@ -7,6 +7,7 @@ use App\Data\Entities\Response;
 use App\Data\Factories\FilterFactory;
 use App\Data\Factories\OrderFactory;
 use App\Data\Repositories\MySql\UserRepository;
+use App\Data\Resources\Admin\UserResource;
 use App\Data\Resources\Admin\UserResourceCollection;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -40,6 +41,23 @@ class UserController extends Controller
 
         $response->value->add('total', $total);
         $response->value->add('users', UserResourceCollection::toArray($users));
+
+        return $response->json();
+
+    }
+
+    /**
+     * @param Request $request
+     * @param int $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDetails(Request $request, $userId){
+
+        $response = new Response();
+
+        $user = UserRepository::getById($userId);
+
+        $response->value->add('user', UserResource::toArray($user));
 
         return $response->json();
 
