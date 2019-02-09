@@ -11,6 +11,7 @@ use App\Data\Factories\OrderFactory;
 use App\Data\Repositories\MySql\UserRepository;
 use App\Data\Resources\Admin\UserResource;
 use App\Data\Resources\Admin\UserResourceCollection;
+use App\Events\CreateUserEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -98,6 +99,7 @@ class UserController extends Controller
 
         $user = UserRepository::create($user);
 
+        event( new CreateUserEvent($user));
 
         $response->code = HttpStatusCode::CREATE;
         $response->value->add('user', UserResource::toArray($user));
