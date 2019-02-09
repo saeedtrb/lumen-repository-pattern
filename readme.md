@@ -1,11 +1,11 @@
 # Lumen Repository Pattern
 Sample Repository Pattern for Lumen
 
-#Events
+# Events
 
 `CreateUser` trigger when define new user in application
 
-#Notification
+# Notifications
 
 `WelcomeUserNotification` send welcome message to new user
 
